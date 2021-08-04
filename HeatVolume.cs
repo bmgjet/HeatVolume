@@ -18,6 +18,11 @@ namespace Oxide.Plugins
             }
         }
 
+        private void OnPlayerSleepEnded(BasePlayer current)
+        {
+		AddHeatCheck(current);
+        }
+
         void AddHeatCheck(BasePlayer player)
         {
             if (player.GetComponent<Heat_Volume>() == null && !player.IsNpc)
