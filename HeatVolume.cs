@@ -1,10 +1,12 @@
 using UnityEngine;
 namespace Oxide.Plugins
 {
-    [Info("HeatVolume", "bmgjet", "1.0.0")]
+    [Info("HeatVolume", "bmgjet", "1.0.1")]
     [Description("Burns a player when they contact heat_prefab")]
     public class HeatVolume : RustPlugin
     {
+        public static float Damage = 3f; //Damage given each cycle.
+        public static float Tempture = 3f;//Tempture increased by each cycle.
         private void OnPlayerRespawn(BasePlayer current)
         {
             AddHeatCheck(current);
@@ -20,7 +22,7 @@ namespace Oxide.Plugins
 
         private void OnPlayerSleepEnded(BasePlayer current)
         {
-		AddHeatCheck(current);
+            AddHeatCheck(current);
         }
 
         void AddHeatCheck(BasePlayer player)
@@ -47,8 +49,6 @@ namespace Oxide.Plugins
         {
             private BasePlayer _player;
             private Vector3 _pos;
-            public float Damage = 3f;
-            public float Tempture = 3f;
             private void Awake()
             {
                 _player = GetComponent<BasePlayer>();
@@ -61,8 +61,8 @@ namespace Oxide.Plugins
                 {
                     return;
                 }
-                _pos = _player.transform.position;
-                var hits = Physics.SphereCastAll(_pos, 0.1f, Vector3.down);
+                _pos = _player.eyes.position;
+                var hits = Physics.SphereCastAll(_pos, 0.01f, Vector3.one);
                 foreach (var hit in hits)
                 {
                     Collider bc = hit.GetCollider();
